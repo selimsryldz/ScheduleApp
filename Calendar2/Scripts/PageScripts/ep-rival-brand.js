@@ -1,0 +1,32 @@
+﻿openAddForm("/RivalBrand/AddRivalBrand");
+
+function stRemove(e) {
+    const id = e.attributes["data-id"].value;
+    httpGetLang("DeleteConfirmation").then((res) => {
+        console.log(res);
+        tableDataRemove(`RemoveRivalBrand?id=${id}`, res);
+    });
+}
+function stEdit(e) {
+    blockUi();
+    const id = e.attributes["data-id"].value;
+    $.get(`/RivalBrand/EditRivalBrand?id=${id}`)
+        .done(function (responsedata) {
+            $("#edit-form").html(responsedata);
+            $("#edit-modal").modal("show");
+            $.unblockUI();
+        });
+}
+setDatatable();
+
+function result(res) {
+    httpResponse(res);
+}
+
+function begin() {
+    blockUi();
+}
+function complete() {
+    $.unblockUI();
+}
+

@@ -1,0 +1,171 @@
+﻿@model  Calendar2.ViewModels.EditViewModel
+@{
+    ViewBag.Title = "AddSchedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<link href="~/Scripts/DateTimePicker/jquery.datetimepicker.min.css" rel="stylesheet" />*@
+<script src="~/Scripts/jquery-1.8.0.min.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/Content/datepicker.css" rel="stylesheet" />
+<body>
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 20%;
+        }
+        .validation-summary-errors {
+            border: 2px dotted #a94442;
+            background-color: #d76663;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+            .validation-summary-errors ul {
+                list-style-type: none;
+                padding: 10px;
+                color: blanchedalmond;
+            }
+    </style>
+   
+    <a href="/Home/Index">
+
+    </a>
+    @using (Html.BeginForm("EditSchedule", "Home", new { FormMethod = FormMethod.Post }))
+    {<div class="m-content">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--bordered">
+
+
+                <div class="m-portlet__body">
+
+                    <div class="container">
+                        <div class="form-group">
+                            <h1 style="text-align:center"> Program Düzenle</h1>
+                            <hr />
+                            <br />
+
+                            @{
+                                var start_event = Model.editdate.Start_Event.ToString("yyyy-MM-dd HH:mm");
+                                var end_event = Model.editdate.End_Event.ToString("yyyy-MM-dd HH:mm");
+
+                            }
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <p style="font-weight:normal">Başlangıç</p>
+                                    <input type="text" value="@start_event" name="editdate.Start_Event" autocomplete="off" class="form-control datetimepicker" required />
+                                </div>
+                                <div class="col-sm-6">
+                                    <p style="font-weight:normal">Bitiş</p>
+                                    <input type="datetime" value="@end_event" name="editdate.End_Event" autocomplete="off" class="form-control datetimepicker" required />
+                                </div>
+                                <div class="col-sm-12">
+                                    <br />
+
+                                </div>
+                                <br />
+                                <div class="col-sm-6">
+                                    <p style="font-weight:normal">Başlık</p>
+
+                                    <input type="text" value="@Model.editdate.Title" name="editdate.Title" class="form-control" />
+
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <p style="font-weight:normal">Konum</p>
+
+                                    <input type="text" value="@Model.editdate.Location" name="editdate.Location" class="form-control" />
+                                </div>
+                            </div>
+                            <br />
+                            @if (Model.editdate.IsApproved == true)
+                            {
+                            <div class="alert alert-success" role="alert">
+                               Bu program onaylanmış
+                            </div>
+                            }
+
+                            @if(Model.editdate.IsApproved == false)
+                            { 
+
+                            @Html.ValidationSummary(false)
+                            <div class="col-sm-12 row right">
+
+                                @if (Model.editdate.IsApproved == false)
+                                {
+                                    if (Model.fark < 48 && Model.editdate.End_Event < Model.now)
+                                    {
+                                        <button type="button" class="btn btn-success" style="text-align:center" id="approve-button" data-id=@Model.editdate.Id> <i class="fas fa-check"></i> Onayla</button>
+                                    }
+                                }                              
+                              
+                                    <button type="submit" class="btn btn-primary" style="text-align:center"><i class="fas fa-save"></i> Güncelle</button>
+                                
+
+
+                                <button class="btn btn-danger" style="text-align:center" id="delete-button" type="button" data-id=@Model.editdate.Id><i class="fas fa-trash"></i> Sil</button>
+
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }
+</body>
+<script>
+    var dateToday = new Date();
+    $(function () {
+        $('.datetimepicker').datetimepicker({
+            autoclose: true,
+            minDate: new Date()
+        }).on('dp.show', function () {
+            return $(this).data('DateTimePicker').defaultDate(new Date());
+        });
+    });
+
+    $(document).on("click", "#delete-button", function () {
+        var confirmDelete = confirm("Silme işlemini onaylıyor musunuz?");
+        if (confirmDelete) {
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/Home/Delete/' + id,
+                type: 'POST',
+                success: function (e) {
+                    console.log(e);
+                    window.location.href = "/Home/Index";
+                },
+                error: function (e) {
+                    alert("Silme İşlemi Başarısız")
+
+                }
+            });
+        }
+    })
+    $(document).on("click", "#approve-button", function () {
+        var confirmDelete = confirm("Bu programı onaylamak istediğinize emiin misiniz?");
+        if (confirmDelete) {
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/Home/Approve/' + id,
+                type: 'POST',
+                success: function (e) {
+                    console.log(e);
+                    window.location.href = "/Home/Index";
+                },
+                error: function (e) {
+                    alert("Onaylama İşlemi Başarısız")
+
+                }
+            });
+        }
+    })
+
+</script>
+
+
+

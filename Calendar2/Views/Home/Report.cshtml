@@ -1,0 +1,114 @@
+﻿@using Calendar2.ViewModels
+@model ReportViewModel
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-1.8.0.min.js"></script>
+
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+<body>
+    <br />
+    <div class="container">
+        <div class="form-group">
+            <div class="m-content">
+                <div class="m-portlet m-portlet--head-solid-bg m-portlet--bordered">
+
+                    <div class="m-portlet__body">
+                        <h1 style="text-align:center"> Program Listesi</h1>
+                        <hr />
+                        <br />
+                        @{
+                            int i = 0;
+
+                        }
+
+                        @using (Html.BeginForm())
+                        {
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p>Başlagıç Tarihi</p>
+                                    <input type="text" value="" name="baslangictarihi" autocomplete="off" class="form-control datetimepicker" />
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <p>Bitiş Tarihi</p>
+                                    <input type="text" value="" name="bitistarihi" autocomplete="off" class="form-control datetimepicker" />
+                                </div>
+                                <div class="col-sm-2">
+                                    <br />
+                                    <br />
+                                    @Html.DropDownListFor(m => m.userIdList, new SelectList(Model.userNameList, "Value", "Text"));
+                                </div>
+                                <div class="col-sm-2">
+                                    <br />
+                                    <br />
+                                    <button type="submit" class="btn btn-info" style="text-align:center"><i class="fas fa-filter"></i> Filtrele </button>
+                                </div>
+
+                            </div>
+                            <br />
+                        }
+                      
+
+                        <div class="m-section" id="page">
+
+                            <div class="m-section__content">
+                                <table class="table m-table m-table--head-bg-brand">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Adı Soyadı</th>
+                                            <th>Başlık</th>
+                                            <th>Konum</th>
+                                            <th>Başlangıç Tarihi</th>
+                                            <th>Bitiş Tarihi</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.calliste)
+                                        {
+                                            i++;
+                                        <tr class="selim">
+                                            <th scope="row">@i</th>
+                                            <td>@item.User.Name @item.User.Surname</td>
+                                            <td>@item.Title</td>
+                                            <td>@item.Location</td>
+                                            <td>@item.Start_Event</td>
+                                            <td>@item.End_Event</td>
+
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <nav aria-label=...>
+                            <ul class=pagination>
+                                <li id="previous-page" class="page-item"><a class="page-link" href="javascript:void(0)" aria-label=Previous><span aria-hidden=true>&laquo;</span></a></li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+        $('.datetimepicker').datetimepicker({
+            autoclose: true
+        });
+    });
+
+</script>
+
+<script src="~/Scripts/pagination.js"></script>

@@ -1,0 +1,27 @@
+﻿.fa-ban {
+    color: red;
+    cursor: pointer;
+}
+.fa-edit {
+    color: orange;
+    cursor: pointer;
+}
+
+.error {
+    color: #f4516c !important;
+}
+/*.form-control-feedback {
+    color: #f4516c !important
+}*/
+.addNewItem {
+    color: white !important;
+}
+.margin-zero {
+    margin: 0 !important;
+}
+.height-auto {
+    height: auto !important;
+}
+.padding-zero {
+    padding: 0 !important;
+}

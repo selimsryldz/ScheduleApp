@@ -1,0 +1,304 @@
+﻿@model  Calendar2.ViewModels.CalendarViewModel
+@{
+    ViewBag.Title = "AddSchedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<link href="~/Scripts/DateTimePicker/jquery.datetimepicker.min.css" rel="stylesheet" />*@
+<script src="~/Scripts/jquery-1.8.0.min.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="~/Content/datepicker.css" rel="stylesheet" />
+<body>
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 20%;
+        }
+        .hata {
+            border: 2px dotted #a94442;
+            background-color: #d76663;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+            .hata ul {
+                list-style-type: none;
+                padding: 10px;
+                color: blanchedalmond;
+            }
+    </style>
+
+    <div id="sayi" style="display:none">0</div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="m-content">
+            <div class="m-portlet m-portlet--head-solid-bg m-portlet--bordered">
+
+                <div class="m-portlet__body">
+
+                    <br />
+                    <div class="container">
+                        <div class="form-group">
+                            <h1 style="text-align:center"> Program Ekle </h1>
+                            <hr />
+                            <br />
+
+
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <p style="font-weight:normal">Başlangıç</p>
+                                    <input type="text" value="" name="@Html.NameFor(p => p.calendarliste[0].Start_Event)" autocomplete="off" class="form-control datetimepicker" />
+
+                                </div>
+                                <div class="col-sm-5">
+                                    <p style="font-weight:normal">Bitiş</p>
+
+                                    <input type="text" value="" name="@Html.NameFor(p => p.calendarliste[0].End_Event)" autocomplete="off" class="form-control datetimepicker" />
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <p style="font-weight:normal">Ekle</p>
+
+                                    <button type="button" class="btn btn-danger" style="text-align:center" onclick="javascript:addds()"> <i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+
+                                <div class="col-sm-5">
+                                    <p style="font-weight:normal">Başlık</p>
+
+                                    <input type="text" value="" name="@Html.NameFor(p => p.calendarliste[0].Title)" class="form-control" />
+
+                                </div>
+
+                                <div class="col-sm-5">
+                                    <p style="font-weight:normal">Konum</p>
+
+                                    <input type="text" value="" name="@Html.NameFor(p => p.calendarliste[0].Location)" class="form-control" />
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="row selim">
+
+                                <div class="col-sm-5" id="left">
+
+
+                                </div>
+                                <div class="col-sm-5" id="right">
+
+
+                                </div>
+
+
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <p> Bu programın tekrar etmesini ister misiniz?</p>
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.CheckBox("check")
+                                </div>
+                            </div>
+                            <div class="row" id="recursivebox" style="display:none">
+                                <div class="col-sm-5">
+                                    <p>Hangi tarihe kadar tekrar etmesini istersiniz?</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" value="" name="bitistarihi" autocomplete="off" class="form-control datetimepicker" />
+                                </div>
+
+                            </div>
+
+
+
+                            <br />
+                           @if((string)TempData["hata"] != "")
+                           {
+                            <div class="hata">
+                                <ul>@Model.hata</ul>
+
+                            </div>
+                            
+                           }
+                            <br />
+
+                            <div class="row center">
+                                <button type="submit" class="btn btn-primary" style="text-align:center"><i class="fas fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</body>
+
+
+@{ }
+<script>
+    $(function () {
+        $('.datetimepicker').datetimepicker({
+            autoclose: true
+        });
+    });
+    $(function () {
+        $('.datepicker').datepicker({
+            autoclose: true
+        });
+    });
+
+    // textbox oluştur
+</script>
+
+<script>
+    var counter = 1;
+
+    function addds() {
+
+        //var sayi = $("#sayi").html();
+        //sayi++;
+        //$("#sayi").html(sayi);
+        //console.log($("#sayi").html());
+
+        var elementbasla = document.createElement("input");
+        var elementbitis = document.createElement("input")
+        var elementtitle = document.createElement("input");
+        var elementlocation = document.createElement("input");
+        var labelbasla = document.createElement("label");
+        var labelbitis = document.createElement("label");
+        var labeltitle = document.createElement("label");
+        var labellocation = document.createElement("label");
+        var element = document.createElement('hr');
+        var element2 = document.createElement('hr');
+        var elementbr = document.createElement('br');
+        var elementbr2 = document.createElement('br');
+        var elementbr3 = document.createElement('br');
+        var elementbr4 = document.createElement('br');
+        
+
+        labelbasla.innerHTML = "Başlangıç";
+        labelbasla.setAttribute("style", "font-weight:normal");
+
+
+        labelbitis.innerHTML = "Bitiş";
+        labelbitis.setAttribute("style", "font-weight:normal");
+
+        labeltitle.innerHTML = "Başlık";
+        labeltitle.setAttribute("style", "font-weight:normal");
+
+        labellocation.innerHTML = "Konum";
+        labellocation.setAttribute("style", "font-weight:normal");
+
+
+        elementbasla.setAttribute("type", "text");
+        elementbasla.setAttribute("name", "calendarliste[" + counter + "].Start_Event");
+        elementbasla.setAttribute("autocomplete", "off");
+
+        elementbitis.setAttribute("type", "text");
+        elementbitis.setAttribute("name", "calendarliste[" + counter + "].End_Event");
+        elementbitis.setAttribute("autocomplete", "off");
+
+        elementtitle.setAttribute("type", "text");
+        elementtitle.setAttribute("class", "form-control")
+        elementtitle.setAttribute("name", "calendarliste[" + counter + "].Title");
+        elementtitle.setAttribute("autocomplete", "off");
+
+        elementlocation.setAttribute("type", "text");
+        elementlocation.setAttribute("name", "calendarliste[" + counter + "].Location");
+        elementlocation.setAttribute("class", "form-control")
+        elementlocation.setAttribute("autocomplete", "off");
+
+
+        var left = document.getElementById("left");
+        var selim = document.getElementById("selim");
+        var br = document.createElement("br");
+        var right = document.getElementById("right");
+        
+
+        elementbasla.setAttribute("class", "form-control datetimepicker-" + counter);
+
+        elementbitis.setAttribute("class", "form-control datetimepicker-" + counter);
+
+      
+        right.appendChild(element);
+        left.appendChild(element2);
+        right.appendChild(elementbr);
+        left.appendChild(elementbr2);
+        left.appendChild(labelbasla);
+        left.appendChild(elementbasla);
+
+        right.appendChild(labelbitis);
+        right.appendChild(elementbitis);
+
+        right.appendChild(elementbr3);
+        left.appendChild(elementbr4);
+        left.appendChild(labeltitle);
+        left.appendChild(elementtitle);
+
+        right.appendChild(labellocation);
+        right.appendChild(elementlocation);
+        $('.datetimepicker-' + counter).datetimepicker({
+            autoclose: true
+        });
+
+        counter++;
+
+    }
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#check').click(function () {
+            var $this = $(this);
+            if ($this.is(':checked')) {
+                $('#recursivebox').show();
+            } else {
+                $('#recursivebox').hide();
+            }
+        });
+    });
+   
+</script>
+
+
+
+
+
+@*<script>
+
+        $(function () {
+            //var tarih[];
+
+            for (var i = 1; i < 11; i++) {
+                tarih.push($("#datetimepicker" + i.toString()).val())
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "/Home/TarihIslem",
+                data: { veri: tarih },
+                beforeSend: function () {
+                    console.log("veriler gönderildi.");
+                }
+            }).done(function (data) {
+                    console.log(data);
+                }).fail(function () {
+
+                    console.log("veriler gelmedi.");
+                })
+        })
+
+
+
+
+    </script>*@
